@@ -50,6 +50,5 @@ db.add_all([
 ])
 
 db.commit()
-
 db.close()
 
