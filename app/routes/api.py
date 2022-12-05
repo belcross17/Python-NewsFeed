@@ -29,7 +29,7 @@ def signup():
         db.rollback()
         return jsonify(message = 'Signup failed'), 500
     
-    # adding sessions to continue through all pages
+    # adding persisting data across all routes
     session.clear()
     session['user_id'] = newUser.id
     session['loggedIn'] = True
@@ -49,7 +49,7 @@ def login():
         if user.verify_password(data['password']) == False:
             return jsonify(message = 'Incorrect Credential'), 400
         
-    # adding sessions to continue through all pages
+    # adding persisting data across all routes
     session.clear()
     session['user_id'] = user.id
     session['loggedIn'] = True
