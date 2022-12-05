@@ -2,6 +2,7 @@ import sys
 from flask import Blueprint, request, jsonify, session
 from app.models import User
 from app.db import get_db
+from app.models import User, Post, Comment, Vote
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -61,3 +62,27 @@ def logout():
     # remove session variables
     session.clear()
     return '', 204
+
+# Comment Routes
+@bp.route('/comments', methods=['POST'])
+def comment():
+    data = request.get_json()
+    db = get_db()
+    
+    try:
+        # create a new comment
+        newComment = Comment(
+            comment_text = data['comment_text'],
+            post_id = data['post_id'],
+            user_id = data['user_id']
+        )
+        
+        db.add(newComment)
+        db.commit()
+    except:
+        print(sys.exc_info()[0])
+        
+        db.rollback()
+        return jsonify(message = 'Comment Failed'), 500
+    
+    
